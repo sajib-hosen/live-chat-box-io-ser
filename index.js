@@ -37,10 +37,21 @@ let allUsers = []; // All users in current chat room
 io.on('connection', (socket) => {
     console.log(`User connected ${socket.id}`);
 
+    //   socket.emit(/* ... */);  // basic emit
+    //   socket.broadcast.emit(/* ... */);  // to all clients in the current namespace except the sender
+    //   socket.to("room1").emit(/* ... */);  // to all clients in room1 except the sender
+    //   socket.to("room1").to("room2").emit(/* ... */);  // to all clients in room1 and/or room2 except the sender
+    //   io.in("room1").emit(/* ... */);  // to all clients in room1
+    //   io.of("myNamespace").emit(/* ... */);  // to all clients in namespace "myNamespace"
+    //   io.of("myNamespace").to("room1").emit(/* ... */);  // to all clients in room1 in namespace "myNamespace"
+    //   io.to(socketId).emit(/* ... */);  // to individual socketid (private message)
+    //   io.local.emit(/* ... */);  // to all clients on this node (when using multiple nodes)
+    //   io.emit(/* ... */);  // to all connected clients
+
+
     socket.on('join_room', ( { username, room } ) => { // Add a user to a room
         
         socket.join(room); // Join the user to a socket room
-
         let __createdtime__ = Date.now(); // Current timestamp
 
         socket.to(room).emit('receive_message', {  // Send message to all users currently in the room, apart from the user that just joined
@@ -91,7 +102,6 @@ io.on('connection', (socket) => {
         
         socket.to(room).emit('chatroom_users', chatRoomUsers);
         socket.emit('chatroom_users', chatRoomUsers);
-        
         
 
 
